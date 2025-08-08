@@ -84,9 +84,11 @@ By the end of this lab, you will have a functional Redis replication setup with 
 
 ![guestbook app](guestbook.png)
 
+Open different tabs or browsers and access the app on the LoadBalancer EXTERNAL-IP . Add guest messages and observe how it appears on other tabs when you refresh the page.
+
 ### Clean up
 
-You can use labels to deploy multiple resources with one command. Run the following commands to delete all pods, deployments and services we disployed:
+You can use labels to delete multiple resources with one command. Run the following commands to delete all pods, deployments and services we disployed:
 ```bash
 kubectl delete deployment -l app=redis
 kubectl delete service -l app=redis
