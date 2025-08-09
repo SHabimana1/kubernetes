@@ -11,48 +11,8 @@ Steps:
 - Create Role, Rolebinding, Service account, Secret(to set up the token for the service account),
 - Create the Kubeconfig file for Paul,
 - Verify the permissions.
-- 
 
----
-
-## **Step 1: Create an IAM User and Get Their ARN**
-
-Here, we must create a user call **paul** in the group **dev-group** then attach the **eks:DescribeCluster** policy to the user to allow authentication to EKS.
-
-At the end we must keep the user **ARN**. We will use a bash script to create a user in a group and attach the defined policy.
-
-**Note:** The script depends on the `jq` package that needs to be installed on your computer.
-Run the following command to install it:
-
-- **On Windows**
-Open Powershell as Administrator and use choco to install the package
-```bash
-choco install jq
-```
-
-- **On Mac**
-Use Homebrew to install the package
-```bash
-brew install jq
-```
-
-- **On Ubuntu**
-Use apt to install the jq package
-```bash
-sudo apt update
-sudo apt install jq
-```
-After successful installation of `jq` you can run the `create-eks-user.sh` script (find the script in this same folder). 
-
-After complete execution, the script will generate a credential file containing the user name, the user ARN, the access keys and secret key for the user to configure AWS CLI and access the cluster. 
-
-```bash
-code paul_credentials.txt
-# we created a user called Adam in the group dev-group
-```
----
-
-## **Step 2: Create Role, Rolebinding, Service account, Secret(to set up the token for the service account),**
+## **Step 2: Create namespace, Role, Rolebinding, Service account, Secret(to set up the token for the service account),**
 
 1. First create the namespace dev in your cluster if it does not yet exist: 
 ```bash
@@ -190,4 +150,5 @@ You can verify that the user was successfully delete with the command (if the us
 
 ```bash
 aws iam get-user --user-name paul
+
 ```
