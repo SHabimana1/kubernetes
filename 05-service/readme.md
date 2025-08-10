@@ -137,8 +137,8 @@ kind: Service
 metadata:
   name: utrains-service
 spec:
+   type: ClusterIP
   selector:
-  type: ClusterIP
     app: utrains
   ports:
     - protocol: TCP
