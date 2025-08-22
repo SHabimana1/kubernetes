@@ -9,6 +9,7 @@
 - **eksctl:** Install `eksctl` for EKS cluster management.
 - **Helm:** Install Helm for managing Kubernetes packages.
 
+
 #### Step 1: Create the Filesystem
 1. Get the VPC ID, the subnet IDs and the EKS nodes security group
 
@@ -34,7 +35,7 @@ aws ec2 authorize-security-group-ingress --group-id $SG_ID --protocol tcp --port
 4. Create the EFS filesystem 
 ```bash
 # Create EFS filesystem
-EFS_ID=$(aws efs create-file-system --creation-token "eks-efs" --tags "Key=Name,Value=EKS-EFS" --output text --query "FileSystemId")
+EFS_ID=$(aws efs create-file-system --creation-token "eks-efs" --tags "Key=Name,Value=EKS-EFS" --output text --query "FileSystemId" --region <your-region>)
 ```
 4. Create mount targets for the filesystem in each subnet of your VPC. Replace ``your region`` with the region you are currently using.
 ```bash
