@@ -101,14 +101,119 @@ kubectl apply -f aws-auth.yaml
 
 Use the `rbac-setup.yaml` file and apply it to the cluster
 
+```bash
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app-dev
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: app-dev
+  name: pod-reader
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: dev-team-binding
+  namespace: app-dev
+subjects:
+- kind: Group
+  name: dev-team-group
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io
+```
+
 
 ## 5- Onboarding a new user
 
 ### Create an IAM user and attach to the group
+```bash
+aws iam create-user --user-name new-dev-user
+aws iam add-user-to-group --user-name new-dev-user --group-name k8s-developers
+```
+
 ### Configure AWS CLI for the new user (use temporary credentials for testing)
 - Assume the role
+```bash
+aws sts assume-role \
+  --role-arn arn:aws:iam::<ACCOUNT_ID>:role/K8sDeveloperAccessRole \
+  --role-session-name new-dev-session \
+  --profile new-dev-user > assume-role-output.json
+```
+
 -export the credentials via environment variables
+```bash
+export AWS_ACCESS_KEY_ID=
+export AWS_SECRET_ACCESS_KEY=
+export AWS_SESSION_TOKEN=
+```
 - update the kubeconfig
+```bash
+aws eks update-kubeconfig --name my-cluster --region us-east-1
+```
 - test by accessing a pod
+```bash
+kubectl get pods -n app-dev
+kubectl get pods
+```
 
 ## 6- Clean up
+
+1. Unset the AWS temporary credentials
+```bash
+unset AWS_ACCESS_KEY_ID
+unset AWS_SECRET_ACCESS_KEY
+unset AWS_SESSION_TOKEN
+unset AWS_PROFILE
+```
+
+2. Delete the IAM user
+
+```bash
+aws iam delete-access-key --user-name new-dev-user --access-key-id <ACCESS_KEY_ID>
+
+aws iam remove-user-from-group --user-name new-dev-user --group-name k8s-developers
+aws iam delete-user --user-name new-dev-user
+```
+2. Delete the IAM group with policy
+```bash
+aws iam delete-group-policy --group-name k8s-developers --policy-name AllowAssumeK8sRolePolicy
+
+aws iam delete-group --group-name k8s-developers
+```
+3. Delete the IAM role with policy
+
+```bash
+aws iam detach-role-policy --role-name K8sDeveloperAccessRole --policy-arn arn:aws:iam::<ACCOUNT_ID>:policy/EKSDescribeClusterPolicy
+aws iam delete-role --role-name K8sDeveloperAccessRole
+```
+
+4. Remove the mapping in aws-auth
+Edit and remove the section added during the lab:
+```bash
+kubectl edit configmap aws-auth -n kube-system
+```
+
+Remove this block under mapRoles:
+
+```bash
+- rolearn: arn:aws:iam::<ACCOUNT_ID>:role/K8sDeveloperAccessRole
+  username: developer
+  groups:
+    - dev-team-group
+```
+Save and exit.
+
+5. Delete rbac resources
+```bash
+kubectl delete -f rbac-setup.yaml
+```
