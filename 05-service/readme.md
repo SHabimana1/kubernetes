@@ -137,6 +137,7 @@ kind: Service
 metadata:
   name: utrains-service
 spec:
+  type: ClusterIP
   selector:
     app: utrains
   ports:

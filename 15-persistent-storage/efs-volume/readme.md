@@ -216,4 +216,3 @@ Delele your cluster when done practicing.
 - Restrict IAM permissions to specific EFS resources
 
 This provides a shared, persistent filesystem accessible by all pods simultaneously.
-

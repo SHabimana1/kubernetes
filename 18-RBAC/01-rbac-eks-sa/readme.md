@@ -4,7 +4,7 @@
 
 ## **Overview**
 
-We have a new user called Paul in dev team and we need to give him access to the cluster resources. As an administrator, setup RBAC using a serviceaccount to allow Adam to list, create and delete pods and services in the dev namespace. 
+We have a new user called Paul in dev team and we need to give him access to the cluster resources. As an administrator, setup RBAC using a serviceaccount to allow Paul to list, create and delete pods and services in the dev namespace. 
 
 Steps:
 - Create IAM user for Paul with policy for EKS access and access credentials to configure AWS CLI,
