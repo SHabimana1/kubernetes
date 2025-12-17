@@ -9,6 +9,7 @@
 - **eksctl:** Install `eksctl` for EKS cluster management.
 - **Helm:** Install Helm for managing Kubernetes packages.
 
+
 #### Step 1: Create the Filesystem
 1. Get the VPC ID, the subnet IDs and the EKS nodes security group
 
@@ -215,5 +216,3 @@ Delele your cluster when done practicing.
 - Restrict IAM permissions to specific EFS resources
 
 This provides a shared, persistent filesystem accessible by all pods simultaneously.
-
-

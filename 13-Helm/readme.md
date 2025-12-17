@@ -87,13 +87,38 @@ helm install prometheus --namespace monitoring prometheus-community/kube-prometh
 
 3. Use the prometheus grafana stack for monitoring kubernetes cluster live
 ```bash
+kubectl get deploy -n monitoring 
 kubectl get pods -n monitoring
+kubectl get daemonsets -n monitoring
+kubectl get cm -n monitoring
+kubectl get secrets -n monitoring
 kubectl get svc -n monitoring   ## Get the details of prometheus-grafana service
-kubectl edit service prometheus-grafana -n monitoring # change to LoadBalancer
+kubectl edit service prometheus-grafana -n monitoring # change the type to LoadBalancer and access Grafana in the browser
+kubectl edit service prometheus-kube-prometheus-prometheus -n monitoring # change the type to LoadBalancer and access Prometheus in the browser (specify the port 9090 in the browser)
+
+kubectl get secret prometheus-grafana -n monitoring -o jsonpath="{.data.admin-password}" | base64 --decode # to get the password for grafana (username=admin)
+
 ```
+With Helm you deploy all this resources with few commands.
 
 **Official gihub repo for prometheus and grafana**
 https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack
+
+To list the release
+```bash
+helm list -n monitoring
+```
+
+To uninstall the release:
+
+```bash
+helm uninstall prometheus -n monitoring
+```
+Verify
+
+```bash
+kubectl get all -n monitoring
+```
 
 ### Lab 3: Create a Helm chart for a simple nginx app and deploy it in a cluster
 
@@ -138,6 +163,7 @@ service:
   type: ClusterIP
   port: 80
 ```
+Save and quit
 
 3. Modify templates/deployment.yaml
 
@@ -218,4 +244,5 @@ kubectl get svc
 helm uninstall my-release
 kubectl get pods
 kubectl get svc
+
 ```

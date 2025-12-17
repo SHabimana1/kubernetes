@@ -137,8 +137,8 @@ kind: Service
 metadata:
   name: utrains-service
 spec:
-  selector:
   type: ClusterIP
+  selector:
     app: utrains
   ports:
     - protocol: TCP
@@ -215,7 +215,6 @@ spec:
   type: ExternalName
   externalName: my.service.example.com
 ```
-
 
 
 

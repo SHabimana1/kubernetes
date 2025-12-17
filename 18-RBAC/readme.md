@@ -80,7 +80,7 @@ kubectl apply -f rbac-sa.yaml
 ```
 2. Test
 
-Here we will do a simple test to verify that users that will be associated with this service account will only have access to the defined resources.
+Here we will do a simple test to verify that users that will be associated with this service account will only have access to defined resources.
 
 ```bash
 kubectl get pods -n dev --as=system:serviceaccount:dev:dev-sa

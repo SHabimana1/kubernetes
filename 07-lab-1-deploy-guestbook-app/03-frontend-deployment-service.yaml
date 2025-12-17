@@ -21,10 +21,6 @@ spec:
         env:
         - name: GET_HOSTS_FROM # simple way to enable frontend and redis communication 
           value: "dns"
-        resources:
-          requests:
-            cpu: 100m
-            memory: 100Mi
         ports:
         - containerPort: 80
 ---

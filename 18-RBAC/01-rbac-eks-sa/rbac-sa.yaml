@@ -40,3 +40,15 @@ kind: ServiceAccount
 metadata:
   name: dev-sa
   namespace: "dev"
+# secrets:
+#  - name: dev-secret
+#---
+#apiVersion: v1
+#kind: Secret
+#metadata:
+#  name: dev-secret
+#  namespace: "dev"
+#  annotations:
+#    kubernetes.io/service-account.name: dev-sa
+#type: kubernetes.io/service-account-token
+#kubectl create token dev-sa -n dev --duration=24h    # this will create a token.
